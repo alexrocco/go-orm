@@ -1,12 +1,14 @@
 package repositories
 
 import (
-	"github.com/alexrocco/go-orm/internal/app/go-orm/models"
+	"github.com/alexrocco/go-orm/internal/models"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/sqlite" // Import sqlite3
 )
+
+// NewDB creates a new DB connection
 func NewDB() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:test123@tcp(localhost:3306)/goorm?charset=utf8")
+	db, err := gorm.Open("sqlite3", ":memory:")
 	if err != nil {
 		panic(err)
 	}

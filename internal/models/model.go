@@ -10,7 +10,7 @@ const (
 
 // People holds personal information
 type People struct {
-	ID uint64 `gorm:"type:bigint(20) unsigned auto_increment;not null;primary_key" json:"id"`
+	ID        uint64 `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Gender    Gender `json:"gender"`

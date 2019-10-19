@@ -6,10 +6,10 @@
 package main
 
 import (
-	"github.com/alexrocco/go-orm/internal/app/go-orm"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/handlers"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/repositories"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/services"
+	"github.com/alexrocco/go-orm/internal"
+	"github.com/alexrocco/go-orm/internal/handlers"
+	"github.com/alexrocco/go-orm/internal/repositories"
+	"github.com/alexrocco/go-orm/internal/services"
 )
 
 // Injectors from wire.go:

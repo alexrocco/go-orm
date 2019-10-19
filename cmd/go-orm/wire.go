@@ -4,10 +4,10 @@
 package main
 
 import (
-	app "github.com/alexrocco/go-orm/internal/app/go-orm"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/handlers"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/repositories"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/services"
+	app "github.com/alexrocco/go-orm/internal"
+	"github.com/alexrocco/go-orm/internal/handlers"
+	"github.com/alexrocco/go-orm/internal/repositories"
+	"github.com/alexrocco/go-orm/internal/services"
 	"github.com/google/wire"
 )
 

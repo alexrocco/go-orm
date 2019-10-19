@@ -2,25 +2,35 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/models"
-	"github.com/alexrocco/go-orm/internal/app/go-orm/services"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+
+	"github.com/alexrocco/go-orm/internal/models"
+	"github.com/alexrocco/go-orm/internal/services"
+	"github.com/gorilla/mux"
 )
 
-// PeopleHandler holds services used in the struct
-type PeopleHandler struct {
+// PeopleHandler defines PeopleHander behaviours
+type PeopleHandler interface {
+	Get(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
+	Create(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+	GetAll(w http.ResponseWriter, r *http.Request)
+}
+
+// peopleHandlerImpl implements PeopleHandler interface
+type peopleHandlerImpl struct {
 	peopleService services.PeopleService
 }
 
 // NewPeopleHandler creates a new PeopleHandler
 func NewPeopleHandler(service services.PeopleService) PeopleHandler {
-	return PeopleHandler{peopleService: service}
+	return peopleHandlerImpl{peopleService: service}
 }
 
 // Get a People resource
-func (ph PeopleHandler) Get(w http.ResponseWriter, r *http.Request) {
+func (ph peopleHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
@@ -29,7 +39,7 @@ func (ph PeopleHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	people := ph.peopleService.FindById(id)
+	people := ph.peopleService.FindByID(id)
 
 	if people.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
@@ -40,7 +50,7 @@ func (ph PeopleHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 // Update a People resource
-func (ph PeopleHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (ph peopleHandlerImpl) Update(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	people := models.People{}
 	if err := decoder.Decode(&people); err != nil {
@@ -60,7 +70,7 @@ func (ph PeopleHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 // Create a People resource
-func (ph PeopleHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (ph peopleHandlerImpl) Create(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	people := models.People{}
 	if err := decoder.Decode(&people); err != nil {
@@ -80,7 +90,7 @@ func (ph PeopleHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete a People resource
-func (ph PeopleHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (ph peopleHandlerImpl) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
@@ -89,13 +99,13 @@ func (ph PeopleHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ph.peopleService.DeleteById(id)
+	ph.peopleService.DeleteByID(id)
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
 // GetAll gets all the People resource
-func (ph PeopleHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (ph peopleHandlerImpl) GetAll(w http.ResponseWriter, r *http.Request) {
 	people := ph.peopleService.FindAll()
 	respondJSON(w, http.StatusOK, people)
 }
